@@ -62,7 +62,7 @@ module Unix (M : Alcotest_engine.Monad.S) = struct
   let prepare ~base ~dir ~name =
     if not (Sys.file_exists dir) then (
       Unix.mkdir_p dir 0o770;
-      if Sys.unix || Sys.cygwin then (
+      if (Sys.unix || Sys.cygwin) && Unix.has_symlink () then (
         let this_exe = Filename.concat base name
         and latest = Filename.concat base "latest" in
         unlink_if_exists this_exe;
