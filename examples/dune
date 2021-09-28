@@ -1,4 +1,14 @@
 (tests
  (names simple floats)
  (package alcotest)
+ (modes native js)
  (libraries alcotest))
+
+
+(rule
+  (alias runtest-js)
+  (action (run node %{dep:floats.bc.js})))
+
+(rule
+  (alias runtest-js)
+  (action (run node %{dep:simple.bc.js})))
