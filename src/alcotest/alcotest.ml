@@ -81,25 +81,30 @@ module Unix (M : Alcotest_engine.Monad.S) = struct
       | Some { columns; _ } -> Some columns
       | None -> None
 
+  external before_test
+           :  output:out_channel
+              -> stdout:out_channel
+              -> stderr:out_channel
+              -> unit
+    = "alcotest_before_test"
+
+  external after_test
+           :  stdout:out_channel
+              -> stderr:out_channel
+              -> unit
+    = "alcotest_after_test"
+
   let with_redirect file fn =
     M.return () >>= fun () ->
     Fmt.(flush stdout) ();
     Fmt.(flush stderr) ();
-    let fd_stdout = Unix.descr_of_out_channel stdout in
-    let fd_stderr = Unix.descr_of_out_channel stderr in
-    let fd_old_stdout = Unix.dup fd_stdout in
-    let fd_old_stderr = Unix.dup fd_stderr in
-    let fd_file = Unix.(openfile file [ O_WRONLY; O_TRUNC; O_CREAT ] 0o660) in
-    Unix.dup2 fd_file fd_stdout;
-    Unix.dup2 fd_file fd_stderr;
-    Unix.close fd_file;
+    let oc = open_out file in
+    before_test ~output:oc  ~stdout ~stderr;
     (try fn () >|= fun o -> `Ok o with e -> M.return @@ `Error e) >|= fun r ->
     Fmt.(flush stdout ());
     Fmt.(flush stderr ());
-    Unix.dup2 fd_old_stdout fd_stdout;
-    Unix.dup2 fd_old_stderr fd_stderr;
-    Unix.close fd_old_stdout;
-    Unix.close fd_old_stderr;
+    close_out oc;
+    after_test ~stdout:stdout ~stderr;
     match r with `Ok x -> x | `Error e -> raise e
 
   let setup_std_outputs = Fmt_tty.setup_std_outputs
