@@ -1,0 +1,14 @@
+(tests
+ (names simple)
+ (package alcotest)
+ (modes js)
+ (libraries alcotest brr current_ansi js_of_ocaml))
+
+(rule
+ (alias runtest-js)
+ (action
+  (run node %{dep:simple.bc.js})))
+
+(alias
+ (name runtest-browser)
+ (deps index.html simple.bc.js))
