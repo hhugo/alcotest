@@ -95,7 +95,7 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
-          opam-local-packages: ${{ matrix.opam-local-packages }}
+          opam-local-packages: ${{ matrix.opam-local-packages || '*.opam' }}
 
       - run: opam install ${{ matrix.packages }} --with-test --deps-only
       - run: opam install wasm_of_ocaml-compiler
