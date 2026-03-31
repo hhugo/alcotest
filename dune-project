@@ -97,3 +97,16 @@ tests to run.
   (fmt (and :with-test (>= 0.8.7)))
   (cmdliner (and :with-test (>= 1.2.0)))
   (conf-npm :with-test)))
+
+(package
+ (name alcotest-wasm)
+ (synopsis "Virtual package containing optional WebAssembly dependencies for Alcotest")
+ (description "Virtual package containing optional WebAssembly dependencies for Alcotest")
+ (documentation "https://mirage.github.io/alcotest")
+ (allow_empty)
+ (depends
+  (alcotest (= :version))
+  (wasm_of_ocaml-compiler (>= 6.0))
+  (fmt (and :with-test (>= 0.8.7)))
+  (cmdliner (and :with-test (>= 1.2.0)))
+  (conf-npm :with-test)))
