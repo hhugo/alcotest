@@ -6,4 +6,7 @@
   (names alcotest_stubs))
  (js_of_ocaml
   (javascript_files runtime.js))
+ (wasm_of_ocaml
+  (javascript_files runtime.js)
+  (wasm_files runtime.wat))
  (preprocess future_syntax))
