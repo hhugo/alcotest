@@ -28,6 +28,7 @@ tests to run.
   (fmt (>= 0.8.7))
   astring
   (cmdliner (>= 1.2.0))
+  out-channel-redirect
   (re (>= 1.7.2))
   stdlib-shims
   (uutf (>= 1.0.1))
